@@ -1,0 +1,4 @@
+name: simulacion
+dependencies:
+    excel: ^1.0.9
+    normal: ^0.5.1

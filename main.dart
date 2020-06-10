@@ -1,17 +1,24 @@
-import 'models/entity.dart';
+import 'models/textile.dart';
+import 'models/generator.dart';
 
 void main() {
   // Initialize
   print("ESTAT: Iniciant màquinaria");
   int clock = 0;
-  List<Entity> textils = List();
+  Generator generator = Generator();
 
   // Running
   print("ESTAT: Running");
-  while (clock < 800) {
+
+  List<Textile> initialQueue = generator.generateTextile(clock);
+
+  while (clock < (8 * 60)) {
+    initialQueue.addAll(generator.generateTextile(clock));
+
     ++clock;
   }
 
   // To finish
+  print("S'ha acabat la simulació amb ${initialQueue.length} peces");
   print("ESTAT: S'ha acabat la simulació");
 }
