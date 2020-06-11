@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+
+import 'package:normal/normal.dart';
 
 import 'models/processador.dart';
 import 'models/generator.dart';
@@ -8,6 +11,7 @@ import './models/sim_state.dart';
 import 'package:redux/redux.dart';
 import './redux/actions.dart';
 import './models/extensions.dart';
+import 'globals.dart';
 
 loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
   if (!(action is OneClock)) {
@@ -18,17 +22,18 @@ loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
 }
 
 void main() {
+  // Seed for random
+  seed = inputNumber("INPUT: Indica una seed");
+
   // Initialize
   int capacitatRentadora = inputNumber(
       "INPUT: Indica la capacitat de la rentadora (int, default 50)", 50);
-  int duracioRentadora = inputNumber(
-      "INPUT: Indica la duració de la rentadora en minuts (int, default 45)",
-      45);
   int capacitatSecadora = inputNumber(
       "INPUT: Indica la capacitat de la secadora (int, default 50)", 50);
-  int duracioSecadora = inputNumber(
-      "INPUT: Indica la duració de la secadora en minuts (int, default 45)",
-      45);
+  
+  // Durations in minutes (normal distribution)
+  int duracioRentadora = Normal.generate(1, mean: 45, variance: 2, seed: seed).first.round();
+  int duracioSecadora = Normal.generate(1, mean: 30, variance: 2, seed: seed).first.round();
 
   print("ESTAT: Iniciant màquinaria");
   final store = new Store<SimState>(
