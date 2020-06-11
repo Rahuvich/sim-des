@@ -2,3 +2,5 @@ name: simulacion
 dependencies:
     excel: ^1.0.9
     normal: ^0.5.1
+    redux: ^4.0.0
+    uuid: ^2.0.4
