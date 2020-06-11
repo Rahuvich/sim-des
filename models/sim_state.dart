@@ -8,7 +8,8 @@ class SimState {
   final List<Textile> queue3;
   final List<Textile> queue4;
   final List<Textile> queue5;
-  final List<Textile> queue6;
+  final List<Textile> damagedQueue;
+
   final List<Textile> doneQueue;
 
   final List<Textile> rentadora1;
@@ -29,7 +30,7 @@ class SimState {
       queue3: [],
       queue4: [],
       queue5: [],
-      queue6: [],
+      damagedQueue: [],
       doneQueue: [],
       rentadora1: [],
       rentadora2: [],
@@ -37,24 +38,6 @@ class SimState {
       secadora2: [],
       CLK: 1,
     );
-  }
-
-  SimState copyWith(SimState state) {
-    return SimState(
-        CLK: state.CLK,
-        queue0: state.queue0,
-        queue1: state.queue1,
-        queue2: state.queue2,
-        queue3: state.queue3,
-        queue4: state.queue4,
-        queue5: state.queue5,
-        queue6: state.queue6,
-        rentadora1: state.rentadora1,
-        rentadora2: state.rentadora2,
-        secadora1: state.secadora1,
-        secadora2: state.secadora2,
-        planxa: state.planxa,
-        doneQueue: state.doneQueue);
   }
 
   SimState(
@@ -65,7 +48,7 @@ class SimState {
       this.queue3,
       this.queue4,
       this.queue5,
-      this.queue6,
+      this.damagedQueue,
       this.secadora1,
       this.secadora2,
       this.planxa,

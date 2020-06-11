@@ -1,9 +1,8 @@
 import '../globals.dart';
 
 class Textile {
-  Textile({this.tipus, this.id}) {
-    this.name = type[this.tipus];
-    this.damaged = false;
+  Textile({this.tipus, this.id, this.damaged}) {
+    this.name = textileTypes[this.tipus];
   }
 
   final String id;
@@ -16,11 +15,3 @@ class Textile {
     return (textil is Textile) && textil.id == this.id;
   }
 }
-
-const Map<int, String> type = const {
-  0: "Tovallola",
-  1: "Cobrellit",
-  2: "Manta",
-  3: "Funda de coixí",
-  4: "Llençol"
-};

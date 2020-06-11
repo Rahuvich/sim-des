@@ -7,7 +7,7 @@ import 'dart:math';
 SimState simReducer(SimState state, action) {
   if (action is SimFinished) {
     print(
-        "ESTAT: S'ha acabat la simulacio amb ${state.doneQueue.length} peces netes i ${state.queue0.length} peces esperant");
+        "ESTAT: S'ha acabat la simulacio amb ${state.doneQueue.length} peces netes i ${state.damagedQueue.length} peces danyades");
     return state;
   }
 
@@ -20,13 +20,14 @@ SimState simReducer(SimState state, action) {
     queue3: queue3Reducer(state.queue3, state.rentadora1, action),
     queue4: queue4Reducer(state.queue4, state.rentadora2, action),
     queue5: queue5Reducer(state.queue5, state.secadora2, action),
-    queue6: queue6Reducer(state.queue6, state.secadora1, state.planxa, action),
+    doneQueue: doneQueueReducer(
+        state.doneQueue, state.secadora1, state.planxa, action),
     rentadora1: rentadora1Reducer(state.rentadora1, state.queue1, action),
     rentadora2: rentadora2Reducer(state.rentadora2, state.queue2, action),
     secadora1: secadora1Reducer(state.secadora1, state.queue3, action),
     secadora2: secadora2Reducer(state.secadora2, state.queue4, action),
     planxa: planxaReducer(state.planxa, state.queue5, action),
-    doneQueue: doneQueueReducer(state.doneQueue, state.queue6, action),
+    damagedQueue: damagedQueueReducer(state.damagedQueue, action),
   );
 }
 
@@ -37,7 +38,9 @@ List<Textile> queue0Reducer(
     return prevState.sublist(action.capacity);
   }
 
-  if (action is SeparatorToGroup1 || action is SeparatorToGroup2) {
+  if (action is SeparatorToGroup1 ||
+      action is SeparatorToGroup2 ||
+      action is DamagedTextiles) {
     List<Textile> aux = List.from(prevState);
     aux.removeWhere((textil) => action.textils.contains(textil));
     return aux;
@@ -96,7 +99,7 @@ List<Textile> queue5Reducer(
   return prevState;
 }
 
-List<Textile> queue6Reducer(List<Textile> prevState, List<Textile> secadora1,
+List<Textile> doneQueueReducer(List<Textile> prevState, List<Textile> secadora1,
     List<Textile> planxa, action) {
   if (action is Secadora1Done) {
     return List.unmodifiable([]..addAll(prevState)..addAll(secadora1));
@@ -107,9 +110,11 @@ List<Textile> queue6Reducer(List<Textile> prevState, List<Textile> secadora1,
   return prevState;
 }
 
-List<Textile> doneQueueReducer(
-    List<Textile> prevState, List<Textile> waitingQueue, action) {
-  return waitingQueue;
+List<Textile> damagedQueueReducer(List<Textile> prevState, action) {
+  if (action is DamagedTextiles) {
+    return List.unmodifiable([]..addAll(prevState)..addAll(action.textils));
+  }
+  return prevState;
 }
 
 List<Textile> rentadora1Reducer(

@@ -29,9 +29,9 @@ loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
 }
 
 void main() {
-  print('Empieza a leer');
+  print('Llegint excel...');
   readInputData();
-  print('Acaba de leer');
+  print('Done!');
 
   // Seed for random
   Generator.seed = inputNumber("INPUT: Indica una seed");
@@ -79,6 +79,7 @@ void main() {
     separator.processa(
         clock: store.state.CLK,
         textils: store.state.queue0,
+        toDamaged: (textils) => store.dispatch(DamagedTextiles(textils)),
         toGroup1: (textils) => store.dispatch(SeparatorToGroup1(textils)),
         toGroup2: (textils) => store.dispatch(SeparatorToGroup2(textils)));
 

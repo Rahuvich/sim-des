@@ -13,25 +13,32 @@ class Separator {
   processa(
       {int clock,
       List<Textile> textils,
+      Function(List<Textile>) toDamaged,
       Function(List<Textile>) toGroup1,
       Function(List<Textile>) toGroup2}) {
     if (textils.isEmpty) return;
 
-    List<Textile> group1,
+    List<Textile> damaged,
+        group1,
         group2,
         subgroupThisClockTime = textils.sublist(
             0, min(textils.length, _quantitatTextilsPerClock(clock)));
 
-    group1 =
-        subgroupThisClockTime.where((textil) => textil.tipus <= 2).toList();
-    group2 = subgroupThisClockTime.where((textil) => textil.tipus > 2).toList();
+    group1 = subgroupThisClockTime
+        .where((textil) => textil.tipus <= 2 && !textil.damaged)
+        .toList();
+    group2 = subgroupThisClockTime
+        .where((textil) => textil.tipus > 2 && !textil.damaged)
+        .toList();
+    damaged = subgroupThisClockTime.where((textil) => textil.damaged).toList();
 
-    if (group2.isNotEmpty || group1.isNotEmpty) {
+    if (group2.isNotEmpty || group1.isNotEmpty || damaged.isNotEmpty) {
       clock_last_separated = clock;
     }
 
     if (group1.isNotEmpty) toGroup1(group1);
     if (group2.isNotEmpty) toGroup2(group2);
+    if (damaged.isNotEmpty) toDamaged(damaged);
   }
 
   int _quantitatTextilsPerClock(clock) =>

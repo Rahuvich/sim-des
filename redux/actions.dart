@@ -4,6 +4,11 @@ class SimFinished {}
 
 class OneClock {}
 
+class DamagedTextiles {
+  final List<Textile> textils;
+  DamagedTextiles(this.textils);
+}
+
 class SeparatorToGroup1 {
   final List<Textile> textils;
   SeparatorToGroup1(this.textils);
