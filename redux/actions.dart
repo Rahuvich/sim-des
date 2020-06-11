@@ -1,6 +1,18 @@
+import '../models/textile.dart';
+
 class SimFinished {}
 
 class OneClock {}
+
+class SeparatorToGroup1 {
+  final List<Textile> textils;
+  SeparatorToGroup1(this.textils);
+}
+
+class SeparatorToGroup2 {
+  final List<Textile> textils;
+  SeparatorToGroup2(this.textils);
+}
 
 class Rentadora1Loaded {
   final capacity;

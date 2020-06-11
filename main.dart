@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:normal/normal.dart';
 
 import 'models/processador.dart';
+import 'models/separator.dart';
 import 'models/generator.dart';
 import './redux/reducer.dart';
 import './models/sim_state.dart';
@@ -14,7 +15,11 @@ import './models/extensions.dart';
 import 'globals.dart';
 
 loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
-  if (!(action is OneClock)) {
+  if (!(action
+          is OneClock /* ||
+      action is SeparatorToGroup2 ||
+      action is SeparatorToGroup1 */
+      )) {
     print('${store.state.CLK.toTimeString()} CLK: $action');
   }
 
@@ -23,18 +28,27 @@ loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
 
 void main() {
   // Seed for random
-  seed = inputNumber("INPUT: Indica una seed");
+  Generator.seed = inputNumber("INPUT: Indica una seed");
 
   // Initialize
   int capacitatRentadora = inputNumber(
       "INPUT: Indica la capacitat de les rentadores (int, default 50)", 50);
   int capacitatSecadora = inputNumber(
       "INPUT: Indica la capacitat de les secadores (int, default 50)", 50);
-  
+
   // Durations in minutes (normal distribution)
-  int duracioRentadora = Normal.generate(1, mean: 45, variance: 2, seed: seed).first.round();
-  int duracioSecadora = Normal.generate(1, mean: 30, variance: 2, seed: seed).first.round();
-  int duracioPlanxa = Normal.generate(1, mean: 4, variance: 2, seed: seed).first.round();
+  int duracioRentadora =
+      Normal.generate(1, mean: 45, variance: 2, seed: Generator.seed)
+          .first
+          .round();
+  int duracioSecadora =
+      Normal.generate(1, mean: 30, variance: 2, seed: Generator.seed)
+          .first
+          .round();
+  int duracioPlanxa =
+      Normal.generate(1, mean: 4, variance: 2, seed: Generator.seed)
+          .first
+          .round();
 
   print("ESTAT: Iniciant màquinaria");
   final store = new Store<SimState>(
@@ -43,6 +57,7 @@ void main() {
     middleware: [loggingMiddleware],
   );
 
+  Separator separator = Separator();
   Processador rentadora1 =
       Processador(capacitat: capacitatRentadora, duracio: duracioRentadora);
   Processador rentadora2 =
@@ -51,22 +66,26 @@ void main() {
       Processador(capacitat: capacitatSecadora, duracio: duracioSecadora);
   Processador secadora2 =
       Processador(capacitat: capacitatSecadora, duracio: duracioSecadora);
-  Processador planxa = 
-      Processador(capacitat: 1, duracio: duracioPlanxa);
+  Processador planxa = Processador(capacitat: 1, duracio: duracioPlanxa);
 
   // Running
   print("ESTAT: Running");
-
   while (store.state.CLK < (8 * 60)) {
+    separator.processa(
+        clock: store.state.CLK,
+        textils: store.state.queue0,
+        toGroup1: (textils) => store.dispatch(SeparatorToGroup1(textils)),
+        toGroup2: (textils) => store.dispatch(SeparatorToGroup2(textils)));
+
     rentadora1.processa(
         store.state.CLK,
-        store.state.queue0.length >= rentadora1.capacitat,
+        store.state.queue1.length >= rentadora1.capacitat,
         () => store.dispatch(Rentadora1Loaded(rentadora1.capacitat)),
         () => store.dispatch(Rentadora1Done(rentadora1.capacitat)));
 
     rentadora2.processa(
         store.state.CLK,
-        store.state.queue0.length >= rentadora2.capacitat,
+        store.state.queue2.length >= rentadora2.capacitat,
         () => store.dispatch(Rentadora2Loaded(rentadora2.capacitat)),
         () => store.dispatch(Rentadora2Done(rentadora2.capacitat)));
 
@@ -87,7 +106,7 @@ void main() {
         store.state.queue5.length >= planxa.capacitat,
         () => store.dispatch(PlanxaLoaded(planxa.capacitat)),
         () => store.dispatch(PlanxaDone(planxa.capacitat)));
-    
+
     store.dispatch(OneClock());
   }
   store.dispatch(SimFinished());
@@ -101,6 +120,3 @@ int inputNumber(String text, [int defaultNum]) {
   assert(x is int);
   return x;
 }
-
-
-

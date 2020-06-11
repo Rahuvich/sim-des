@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:math';
+
+import 'package:normal/normal.dart';
 import 'extensions.dart';
+import 'package:uuid/uuid.dart';
 import 'textile.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -20,8 +23,8 @@ class Generator {
       _clock_last_arrival = clock;
 
       Random random = new Random();
-      return List<Textile>.generate(
-          count, (index) => new Textile(tipus: random.nextInt(5)));
+      return List<Textile>.generate(count,
+          (index) => new Textile(tipus: random.nextInt(5), id: Uuid().v4()));
     }
     return List<Textile>();
   }

@@ -8,6 +8,7 @@ class SimState {
   final List<Textile> queue3;
   final List<Textile> queue4;
   final List<Textile> queue5;
+  final List<Textile> queue6;
   final List<Textile> doneQueue;
 
   final List<Textile> rentadora1;
@@ -28,12 +29,13 @@ class SimState {
       queue3: [],
       queue4: [],
       queue5: [],
+      queue6: [],
       doneQueue: [],
       rentadora1: [],
       rentadora2: [],
       secadora1: [],
       secadora2: [],
-      CLK: 0,
+      CLK: 1,
     );
   }
 
@@ -46,6 +48,7 @@ class SimState {
         queue3: state.queue3,
         queue4: state.queue4,
         queue5: state.queue5,
+        queue6: state.queue6,
         rentadora1: state.rentadora1,
         rentadora2: state.rentadora2,
         secadora1: state.secadora1,
@@ -62,6 +65,7 @@ class SimState {
       this.queue3,
       this.queue4,
       this.queue5,
+      this.queue6,
       this.secadora1,
       this.secadora2,
       this.planxa,
