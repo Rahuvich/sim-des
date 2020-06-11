@@ -1,12 +1,13 @@
 import 'models/textile.dart';
 import 'models/generator.dart';
 
+
 void main() {
   // Initialize
   print("ESTAT: Iniciant màquinaria");
   int clock = 0;
   Generator generator = Generator();
-
+  
   // Running
   print("ESTAT: Running");
 
@@ -25,3 +26,6 @@ void main() {
 
   print("ESTAT: S'ha acabat la simulació");
 }
+
+
+
