@@ -1,4 +1,3 @@
-import 'processador.dart';
 import 'textile.dart';
 
 class SimState {

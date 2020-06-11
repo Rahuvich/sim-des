@@ -27,13 +27,14 @@ void main() {
 
   // Initialize
   int capacitatRentadora = inputNumber(
-      "INPUT: Indica la capacitat de la rentadora (int, default 50)", 50);
+      "INPUT: Indica la capacitat de les rentadores (int, default 50)", 50);
   int capacitatSecadora = inputNumber(
-      "INPUT: Indica la capacitat de la secadora (int, default 50)", 50);
+      "INPUT: Indica la capacitat de les secadores (int, default 50)", 50);
   
   // Durations in minutes (normal distribution)
   int duracioRentadora = Normal.generate(1, mean: 45, variance: 2, seed: seed).first.round();
   int duracioSecadora = Normal.generate(1, mean: 30, variance: 2, seed: seed).first.round();
+  int duracioPlanxa = Normal.generate(1, mean: 4, variance: 2, seed: seed).first.round();
 
   print("ESTAT: Iniciant màquinaria");
   final store = new Store<SimState>(
@@ -42,27 +43,51 @@ void main() {
     middleware: [loggingMiddleware],
   );
 
-  Processador rentadora =
+  Processador rentadora1 =
       Processador(capacitat: capacitatRentadora, duracio: duracioRentadora);
-  Processador secadora =
+  Processador rentadora2 =
+      Processador(capacitat: capacitatRentadora, duracio: duracioRentadora);
+  Processador secadora1 =
       Processador(capacitat: capacitatSecadora, duracio: duracioSecadora);
+  Processador secadora2 =
+      Processador(capacitat: capacitatSecadora, duracio: duracioSecadora);
+  Processador planxa = 
+      Processador(capacitat: 1, duracio: duracioPlanxa);
 
   // Running
   print("ESTAT: Running");
 
   while (store.state.CLK < (8 * 60)) {
-    rentadora.processa(
+    rentadora1.processa(
         store.state.CLK,
-        store.state.queue0.length >= rentadora.capacitat,
-        () => store.dispatch(RentadoraLoaded(rentadora.capacitat)),
-        () => store.dispatch(RentadoraDone(rentadora.capacitat)));
+        store.state.queue0.length >= rentadora1.capacitat,
+        () => store.dispatch(Rentadora1Loaded(rentadora1.capacitat)),
+        () => store.dispatch(Rentadora1Done(rentadora1.capacitat)));
 
-    secadora.processa(
+    rentadora2.processa(
         store.state.CLK,
-        store.state.queue3.length >= secadora.capacitat,
-        () => store.dispatch(SecadoraLoaded(secadora.capacitat)),
-        () => store.dispatch(SecadoraDone(secadora.capacitat)));
+        store.state.queue0.length >= rentadora2.capacitat,
+        () => store.dispatch(Rentadora2Loaded(rentadora2.capacitat)),
+        () => store.dispatch(Rentadora2Done(rentadora2.capacitat)));
 
+    secadora1.processa(
+        store.state.CLK,
+        store.state.queue3.length >= secadora1.capacitat,
+        () => store.dispatch(Secadora1Loaded(secadora1.capacitat)),
+        () => store.dispatch(Secadora1Done(secadora1.capacitat)));
+
+    secadora2.processa(
+        store.state.CLK,
+        store.state.queue4.length >= secadora2.capacitat,
+        () => store.dispatch(Secadora2Loaded(secadora2.capacitat)),
+        () => store.dispatch(Secadora2Done(secadora2.capacitat)));
+
+    planxa.processa(
+        store.state.CLK,
+        store.state.queue5.length >= planxa.capacitat,
+        () => store.dispatch(PlanxaLoaded(planxa.capacitat)),
+        () => store.dispatch(PlanxaDone(planxa.capacitat)));
+    
     store.dispatch(OneClock());
   }
   store.dispatch(SimFinished());

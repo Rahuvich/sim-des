@@ -2,22 +2,52 @@ class SimFinished {}
 
 class OneClock {}
 
-class RentadoraLoaded {
+class Rentadora1Loaded {
   final capacity;
-  RentadoraLoaded(this.capacity);
+  Rentadora1Loaded(this.capacity);
 }
 
-class RentadoraDone {
+class Rentadora1Done {
   final capacity;
-  RentadoraDone(this.capacity);
+  Rentadora1Done(this.capacity);
 }
 
-class SecadoraLoaded {
+class Rentadora2Loaded {
   final capacity;
-  SecadoraLoaded(this.capacity);
+  Rentadora2Loaded(this.capacity);
 }
 
-class SecadoraDone {
+class Rentadora2Done {
   final capacity;
-  SecadoraDone(this.capacity);
+  Rentadora2Done(this.capacity);
+}
+
+class Secadora1Loaded {
+  final capacity;
+  Secadora1Loaded(this.capacity);
+}
+
+class Secadora1Done {
+  final capacity;
+  Secadora1Done(this.capacity);
+}
+
+class Secadora2Loaded {
+  final capacity;
+  Secadora2Loaded(this.capacity);
+}
+
+class Secadora2Done {
+  final capacity;
+  Secadora2Done(this.capacity);
+}
+
+class PlanxaLoaded {
+  final capacity;
+  PlanxaLoaded(this.capacity);
+}
+
+class PlanxaDone {
+  final capacity;
+  PlanxaDone(this.capacity);
 }

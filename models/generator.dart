@@ -14,7 +14,7 @@ class Generator {
   static List<Textile> generateTextile(int clock) {
     if (_clock_last_arrival == null ||
         _clock_last_arrival + _next_arrival < clock) {
-      int count = Random(seed).nextInt(401) + 300; // Uniform distribution (300 - 400 pieces)
+      int count = Random(seed).nextInt(101) + 300; // Uniform distribution (300 - 400 pieces)
       print(
           '${clock.toTimeString()} CLK: ESDEVENIMENT: Ha arribat un camió amb $count peces!');
       _clock_last_arrival = clock;
