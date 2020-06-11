@@ -35,5 +35,5 @@ class Separator {
   }
 
   int _quantitatTextilsPerClock(clock) =>
-      ((clock - clock_last_separated) / duracio).floor();
+      (((clock - clock_last_separated) / duracio).floor()) * 10;
 }
