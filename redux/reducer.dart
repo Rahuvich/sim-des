@@ -36,6 +36,10 @@ List<Textile> queue3Reducer(
   if (action is RentadoraDone) {
     return List.unmodifiable([]..addAll(prevState)..addAll(rentadora));
   }
+  if (action is SecadoraLoaded) {
+    if (action.capacity > prevState.length) return List.unmodifiable([]);
+    return prevState.sublist(action.capacity);
+  }
   return prevState;
 }
 
