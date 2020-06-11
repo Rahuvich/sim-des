@@ -1,20 +1,20 @@
 class Textile {
-  //Textile({this.name, this.tipus, this.damaged}) : status = TextileStatus.DIRTY;
-
   Textile({this.tipus, this.id}) {
     this.name = type[this.tipus];
     this.damaged = false;
-    this.status = TextileStatus.DIRTY;
   }
 
-  int id;
+  final String id;
   String name;
   final int tipus;
   bool damaged;
-  TextileStatus status;
+
+  @override
+  bool operator ==(textil) {
+    return (textil is Textile) && textil.id == this.id;
+  }
 }
 
-enum TextileStatus { DIRTY, WASHED, DRIED, IRONED }
 const Map<int, String> type = const {
   0: "Tovallola",
   1: "Cobrellit",

@@ -15,7 +15,9 @@ SimState simReducer(SimState state, action) {
     CLK: (action is OneClock) ? state.CLK + 1 : state.CLK,
     queue0: queue0Reducer(
         state.queue0, Generator.generateTextile(state.CLK), action),
-    rentadora1: rentadoraReducer(state.rentadora1, state.queue0, action),
+    queue1: queue1Reducer(state.queue1, action),
+    queue2: queue1Reducer(state.queue2, action),
+    rentadora1: rentadoraReducer(state.rentadora1, state.queue1, action),
     queue3: queue3Reducer(state.queue3, state.rentadora1, action),
     secadora1: secadoraReducer(state.secadora1, state.queue3, action),
     doneQueue: doneQueueReducer(state.doneQueue, state.secadora1, action),
@@ -28,7 +30,28 @@ List<Textile> queue0Reducer(
     if (action.capacity > prevState.length) return List.unmodifiable([]);
     return prevState.sublist(action.capacity);
   }
+
+  if (action is SeparatorToGroup1 || action is SeparatorToGroup2) {
+    List<Textile> aux = List.from(prevState);
+    aux.removeWhere((textil) => action.textils.contains(textil));
+    return aux;
+  }
+
   return List.unmodifiable([]..addAll(prevState)..addAll(nextTruck));
+}
+
+List<Textile> queue1Reducer(List<Textile> prevState, action) {
+  if (action is SeparatorToGroup1) {
+    return List.unmodifiable([]..addAll(prevState)..addAll(action.textils));
+  }
+  return prevState;
+}
+
+List<Textile> queue2Reducer(List<Textile> prevState, action) {
+  if (action is SeparatorToGroup2) {
+    return List.unmodifiable([]..addAll(prevState)..addAll(action.textils));
+  }
+  return prevState;
 }
 
 List<Textile> queue3Reducer(

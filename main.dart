@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'models/processador.dart';
+import 'models/separator.dart';
 import 'models/generator.dart';
 import './redux/reducer.dart';
 import './models/sim_state.dart';
@@ -10,7 +11,11 @@ import './redux/actions.dart';
 import './models/extensions.dart';
 
 loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
-  if (!(action is OneClock)) {
+  if (!(action
+          is OneClock /* ||
+      action is SeparatorToGroup2 ||
+      action is SeparatorToGroup1 */
+      )) {
     print('${store.state.CLK.toTimeString()} CLK: $action');
   }
 
@@ -37,6 +42,7 @@ void main() {
     middleware: [loggingMiddleware],
   );
 
+  Separator separator = Separator();
   Processador rentadora =
       Processador(capacitat: capacitatRentadora, duracio: duracioRentadora);
   Processador secadora =
@@ -44,11 +50,16 @@ void main() {
 
   // Running
   print("ESTAT: Running");
-
   while (store.state.CLK < (8 * 60)) {
+    separator.processa(
+        clock: store.state.CLK,
+        textils: store.state.queue0,
+        toGroup1: (textils) => store.dispatch(SeparatorToGroup1(textils)),
+        toGroup2: (textils) => store.dispatch(SeparatorToGroup2(textils)));
+
     rentadora.processa(
         store.state.CLK,
-        store.state.queue0.length >= rentadora.capacitat,
+        store.state.queue1.length >= rentadora.capacitat,
         () => store.dispatch(RentadoraLoaded(rentadora.capacitat)),
         () => store.dispatch(RentadoraDone(rentadora.capacitat)));
 

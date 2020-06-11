@@ -34,7 +34,7 @@ class SimState {
       rentadora2: [],
       secadora1: [],
       secadora2: [],
-      CLK: 0,
+      CLK: 1,
     );
   }
 
