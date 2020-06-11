@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:excel/excel.dart';
 import 'package:normal/normal.dart';
 
 import 'models/processador.dart';
@@ -27,6 +29,10 @@ loggingMiddleware(Store<SimState> store, action, NextDispatcher next) {
 }
 
 void main() {
+  print('Empieza a leer');
+  readInputData();
+  print('Acaba de leer');
+
   // Seed for random
   Generator.seed = inputNumber("INPUT: Indica una seed");
 
@@ -36,6 +42,7 @@ void main() {
   int capacitatSecadora = inputNumber(
       "INPUT: Indica la capacitat de les secadores (int, default 50)", 50);
 
+  print("ESTAT: Iniciant màquinaria");
   // Durations in minutes (normal distribution)
   int duracioRentadora =
       Normal.generate(1, mean: 45, variance: 2, seed: Generator.seed)
@@ -49,8 +56,6 @@ void main() {
       Normal.generate(1, mean: 4, variance: 2, seed: Generator.seed)
           .first
           .round();
-
-  print("ESTAT: Iniciant màquinaria");
   final store = new Store<SimState>(
     simReducer,
     initialState: SimState.initialState(queue0: Generator.generateTextile(0)),
@@ -119,4 +124,16 @@ int inputNumber(String text, [int defaultNum]) {
   int x = int.parse(string);
   assert(x is int);
   return x;
+}
+
+readInputData() {
+  var file = "files/InputData.xlsx";
+  var bytes = File(file).readAsBytesSync();
+  var excel = Excel.decodeBytes(bytes);
+
+  for (var table in excel.tables.keys) {
+    for (var row in excel.tables[table].rows) {
+      textileTypes.insert(row[1].round(), row[0]);
+    }
+  }
 }

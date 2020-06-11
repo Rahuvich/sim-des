@@ -1,5 +1,5 @@
 // Textil type and names
-Map<int, String> textileTypes = new Map<int, String>();
+List<String> textileTypes = [];
 
 // seed for random numbers
 int seed;
