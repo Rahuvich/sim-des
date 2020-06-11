@@ -20,5 +20,8 @@ void main() {
 
   // To finish
   print("S'ha acabat la simulació amb ${initialQueue.length} peces");
+
+  //for(Textile textile in initialQueue) print("PEÇA: ${textile.name}");
+
   print("ESTAT: S'ha acabat la simulació");
 }

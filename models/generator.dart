@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:normal/normal.dart';
 
 import 'textile.dart';
@@ -17,8 +19,9 @@ class Generator {
       int count = Normal.generate(1, mean: 400, variance: 50).first.round();
       print('$clock CLK: ESDEVENIMENT: Ha arribat un camió amb $count peces!');
       _clock_last_arrival = clock;
+      Random random = new Random();
       return List<Textile>.generate(count,
-          (index) => new Textile(name: "Tovallola", tipus: 2, damaged: false));
+          (index) => new Textile(tipus: random.nextInt(5)));
     }
     return List<Textile>();
   }

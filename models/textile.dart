@@ -1,9 +1,23 @@
 class Textile {
-  Textile({this.name, this.tipus, this.damaged}) : status = TextileStatus.DIRTY;
-  final String name;
+  //Textile({this.name, this.tipus, this.damaged}) : status = TextileStatus.DIRTY;
+  
+  Textile({this.tipus}) {
+    this.name = type[this.tipus];
+    this.damaged = false;
+    this.status = TextileStatus.DIRTY;
+  }
+
+  String name;
   final int tipus;
-  final bool damaged;
+  bool damaged;
   TextileStatus status;
 }
 
 enum TextileStatus { DIRTY, WASHED, DRIED, IRONED }
+const Map<int, String> type = const {
+  0: "Tovallola",
+  1: "Cobrellit",
+  2: "Manta",
+  3: "Funda de coixí",
+  4: "Llençol"
+};
