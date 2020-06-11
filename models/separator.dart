@@ -1,5 +1,6 @@
 import 'package:normal/normal.dart';
 
+import 'generator.dart';
 import 'textile.dart';
 import 'dart:math';
 
@@ -8,7 +9,9 @@ class Separator {
   int clock_last_separated = 0;
 
   Separator()
-      : duracio = Normal.generate(1, mean: 3, variance: 1).first.round();
+      : duracio = Normal.generate(1, mean: 3, variance: 1, seed: Generator.seed)
+            .first
+            .round();
 
   processa(
       {int clock,
