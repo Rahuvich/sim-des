@@ -66,7 +66,7 @@ void main() {
 int inputNumber(String text, [int defaultNum]) {
   print(text);
   String string = stdin.readLineSync(encoding: Encoding.getByName('utf-8'));
-  if (string.isEmpty && defaultNum != null) return defaultNum;
+  if (string?.isEmpty ?? true && defaultNum != null) return defaultNum;
   int x = int.parse(string);
   assert(x is int);
   return x;
