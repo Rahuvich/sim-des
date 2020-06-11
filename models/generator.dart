@@ -1,17 +1,21 @@
+import 'dart:async';
 import 'dart:math';
-
 import 'package:normal/normal.dart';
-
 import 'textile.dart';
+import 'dart:io';
+import 'dart:convert';
+import '../globals.dart';
 
 class Generator {
   int seed;
   int _next_arrival;
   int _clock_last_arrival;
 
-  Generator({this.seed})
-      : _next_arrival =
+  Generator({this.seed}) {
+    readInputData();
+    _next_arrival =
             Normal.generate(1, mean: (4 * 60), variance: 30).first.round();
+  } 
 
   List<Textile> generateTextile(int clock) {
     if (_clock_last_arrival == null ||
@@ -25,4 +29,26 @@ class Generator {
     }
     return List<Textile>();
   }
+}
+
+
+readInputData() {
+  final File file = File("files/InputData.csv");
+  Stream<List> inputStream = file.openRead();
+
+  inputStream
+      .transform(utf8.decoder)       // Decode bytes to UTF-8.
+      .transform(new LineSplitter()) // Convert stream to individual lines.
+      .listen((String line) {        // Process results.
+
+        List row = line.split(','); // split by comma
+
+        String name = row[0];
+        String type = row[1];
+
+        textileTypes[int.parse(type)] = name;
+
+        print("${textileTypes[int.parse(type)]}");
+    },
+    onError: (e) { print("Error on reading InputData.csv"); });
 }

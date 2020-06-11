@@ -1,0 +1,1 @@
+Map<int, String> textileTypes = new Map<int, String>();
