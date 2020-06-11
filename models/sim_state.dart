@@ -30,6 +30,10 @@ class SimState {
       queue4: [],
       queue5: [],
       doneQueue: [],
+      rentadora1: [],
+      rentadora2: [],
+      secadora1: [],
+      secadora2: [],
       CLK: 0,
     );
   }

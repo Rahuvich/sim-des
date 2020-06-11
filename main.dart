@@ -48,11 +48,13 @@ void main() {
   while (store.state.CLK < (8 * 60)) {
     rentadora.processa(
         store.state.CLK,
+        store.state.queue0.length >= rentadora.capacitat,
         () => store.dispatch(RentadoraLoaded(rentadora.capacitat)),
         () => store.dispatch(RentadoraDone(rentadora.capacitat)));
 
     secadora.processa(
         store.state.CLK,
+        store.state.queue3.length >= secadora.capacitat,
         () => store.dispatch(SecadoraLoaded(secadora.capacitat)),
         () => store.dispatch(SecadoraDone(secadora.capacitat)));
 
